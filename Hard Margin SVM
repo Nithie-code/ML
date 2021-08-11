@@ -1,0 +1,25 @@
+#Hard/Max Margin SVM
+import pandas as pd 
+import numpy as np 
+from sklearn.svm import LinearSVC
+from sklearn.preprocessing  import StandardScaler
+from sklearn.datasets import load_iris
+import matplotlib.pyplot  as  plt
+%matplotlib inline 
+#load_dataset
+iris=load_iris()
+#store mapping of targets and target  names
+df=pd.DataFrame(data=iris.data,columns=iris.feature_names)
+#target labels  and feature names 
+target_dict=dict(zip(set(iris.target),iris.target_names))
+df["target"]=iris.target
+df["target_names"]=df.target.map(target_dict)
+
+#view the data
+df.tail()
+
+#Setting X and y
+X=df.query("target_names == 'setosa' or target_names == 'versicolor'").loc[:, "petal length (cm)":"petal width (cm)"] 
+y = df.query("target_names == 'setosa' or target_names == 'versicolor'").loc[:, "target"]
+svc = LinearSVC(loss="hinge", C=1000)
+svc=svc.fit(X, y)
