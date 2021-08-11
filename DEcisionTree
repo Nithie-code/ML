@@ -1,0 +1,42 @@
+#Decisiion  Tree
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+#load dataset  from github 
+dataset = pd.read_csv('https://raw.githubusercontent.com/mk-gurucharan/Regression/master/IceCreamData.csv')
+X = dataset['Temperature'].values
+y = dataset['Revenue'].values
+
+#print(dataset.head)
+#print(X.shape)
+#print(y.shape)
+#Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.05)
+#Training the Random Forest Regression model 
+# Fitting Random Forest Regression to the dataset
+from sklearn.tree import DecisionTreeRegressor
+regressor =DecisionTreeRegressor()
+regressor.fit(X_train.reshape(-1,1), y_train.reshape(-1,1))
+#Results prediction  
+y_pred = regressor.predict(X_test.reshape(-1,1))
+#REal  values vs predicted Values 
+df = pd.DataFrame({'Real Values':y_test.reshape(-1), 'Predicted Values':y_pred.reshape(-1)})
+print(df)
+# # Visualising the Random Forest Regression Results  
+X_grid = np.arange(min(X), max(X), 0.01)
+X_grid = X_grid.reshape((len(X_grid), 1))
+plt.scatter(X_test, y_test, color = 'red')
+plt.scatter(X_test, y_pred, color = 'green')
+plt.title('Random Forest Regression')
+plt.xlabel('Temperature')
+plt.ylabel('Revenue')
+plt.show()
+
+plt.plot(X_grid, regressor.predict(X_grid), color = 'black')
+plt.title('Random Forest Regression')
+plt.xlabel('Temperature')
+plt.ylabel('Revenue')
+plt.show()
