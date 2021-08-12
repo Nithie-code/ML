@@ -1,0 +1,81 @@
+import numpy as np 
+import sklearn
+from  sklearn.linear_model import LinearRegression
+x = np.array([5, 15, 25, 35, 45, 55]).reshape((-1, 1))
+y = np.array([5, 20, 14, 32, 22, 38])
+model=LinearRegression()
+model.fit(x, y)
+r_sq=model.score(x,y)
+print("Coefficient  of Determination : ",r_sq)
+print("Intercept: ",model.intercept_)
+print("Slope: ",model.coef_)
+y_pred=model.predict(x)
+print("Predicted Response : ",y_pred)
+#Multiple Linear Regression 
+
+x = [[0, 1], [5, 1], [15, 2], [25, 5], [35, 11], [45, 15], [55, 34], [60, 35]]
+y = [4, 5, 20, 14, 32, 22, 38, 43]
+x, y = np.array(x), np.array(y)
+model = LinearRegression().fit(x, y)
+r_sq = model.score(x, y)
+print('coefficient of determination:', r_sq)
+y_pred = model.intercept_ + np.sum(model.coef_ * x, axis=1)
+print('predicted response:', y_pred, sep='\n')
+
+#predictions
+x_new = np.arange(10).reshape((-1, 2))
+print(x_new)
+y_new=model.predict(x_new)
+print(y_new)
+
+#Ploynomial  Regression
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+x = np.array([5, 15, 25, 35, 45, 55]).reshape((-1, 1))
+y = np.array([15, 11, 2, 8, 25, 32])
+#add polynomial features degree=2
+transformer = PolynomialFeatures(degree=2, include_bias=False)
+transformer.fit(x)
+#input modification
+x_ = transformer.transform(x) #x_ = PolynomialFeatures(degree=2, include_bias=False).fit_transform(x)
+
+print(x_)
+
+#model definition
+model = LinearRegression().fit(x_, y)
+#results
+r_sq = model.score(x_, y)
+print('coefficient of determination:', r_sq)
+print('intercept:', model.intercept_)
+print('coefficients:', model.coef_)
+
+#Advanced Linera regression 
+import statsmodels.api as sm
+
+#data
+x = [[0, 1], [5, 1], [15, 2], [25, 5], [35, 11], [45, 15], [55, 34], [60, 35]]
+y = [4, 5, 20, 14, 32, 22, 38, 43]
+x, y = np.array(x), np.array(y)
+
+#model Definition NB :first  is output 
+model = sm.OLS(y, x)
+results = model.fit()
+
+#get  results
+
+print("Advanced Linear Regression")
+print("*****************************")
+print(results.summary())
+print('coefficient of determination:', results.rsquared)
+print('adjusted coefficient of determination:', results.rsquared_adj)
+print('regression coefficients:', results.params)
+#predictions
+print('predicted response:', results.fittedvalues, sep='\n')
+
+print('predicted response:', results.predict(x), sep='\n')
+#test
+
+x_new = sm.add_constant(np.arange(10).reshape((-1, 1)))
+y_new = results.predict(x_new)
+print(y_new)
