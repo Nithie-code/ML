@@ -1,0 +1,43 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+animals=pd.read_csv("horse.csv")
+print(animals.head())
+target=animals["outcome"]
+print(target.unique())
+animals=animals.drop(['outcome'],axis=1)
+category_variables=['surgery','age','temp_of_extremities','peripheral_pulse','mucous_membrane','capillary_refill_time','pain'
+                    ,'peristalsis','abdominal_distention','nasogastric_tube','nasogastric_reflux','rectal_exam_feces','abdomen',
+                    'abdomo_appearance','surgical_lesion','cp_data']
+import numpy as np
+#convert categorical variables in numerical variables
+for category in category_variables:
+    animals[category]=pd.get_dummies(animals[category])
+#split dataset
+from sklearn.model_selection import train_test_split
+from  sklearn.preprocessing import LabelEncoder
+X,y=animals.values,target.values
+label_encoder =LabelEncoder()
+y=label_encoder.fit_transform(y)
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=1)
+print(X_train.shape)
+#preprocessing
+from sklearn.impute import  SimpleImputer
+from sklearn.tree import DecisionTreeClassifier
+
+imp=SimpleImputer(missing_values=np.nan, strategy='most_frequent')
+X_train=imp.fit_transform(X_train)
+X_test=imp.fit_transform(X_test)
+classifier=DecisionTreeClassifier()
+classifier.fit(X_train,y_train)
+y_predict=classifier.predict(X_test)
+from sklearn.metrics import accuracy_score
+accuracy=accuracy_score(y_predict,y_test)
+print("Accuracy decision Trecison Tree:" ,accuracy)
+
+from sklearn.ensemble import RandomForestClassifier
+randforest=RandomForestClassifier()
+randforest.fit(X_train,y_train)
+y_predict=randforest.predict(X_test)
+
+accuracy=accuracy_score(y_predict,y_test)
+print("Accuracy Random Forest: ",accuracy)
