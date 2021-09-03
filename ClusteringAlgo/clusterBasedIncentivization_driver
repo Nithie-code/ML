@@ -1,0 +1,44 @@
+import pandas as pd
+import numpy  as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("Driver_data.csv",sep=',')
+print(df.head())
+# check number colums and any  missing values
+print(df.info)
+# check  the mean , mediane values
+print(df.describe())
+# define k_means
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=2)
+# drop  id features since it soesn't help  in forming clusters
+df_analyze = df.drop('Driver_ID', axis=1)
+# fit the model to the data
+kmeans.fit(df_analyze)
+# determine cluster  centers vectors
+kmeans.cluster_centers_
+print(kmeans.labels_)
+print(len(kmeans.labels_))
+# print the number of unique labels
+print(type(kmeans.labels_))
+unique, counts = np.unique(kmeans.labels_, return_counts=True)
+print(dict(zip(unique, counts)))
+
+df_analyze['cluster'] = kmeans.labels_
+
+#plt.show()sns.set_style('whitegrid')
+sns.lmplot('Distance_Feature', 'Speeding_Feature', data=df_analyze, hue='cluster', palette='coolwarm', size=6,
+           aspect=1, fit_reg=False)
+kmeans_4=KMeans(n_clusters=4)
+kmeans_4.fit(df.drop('Driver_ID',axis=1))
+print(kmeans_4.cluster_centers_)
+unique,counts=np.unique(kmeans_4.labels_,return_counts=True)
+kmeans_4.cluster_centers_
+print(dict(zip(unique,counts)))
+df_analyze["cluster"]=kmeans_4.labels_
+sns.set_style('whitegrid')
+sns.lmplot('Distance_Feature', 'Speeding_Feature', data=df_analyze, hue='cluster', palette='coolwarm', size=6,
+           aspect=1, fit_reg=False)
+plt.show()
