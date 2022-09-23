@@ -34,7 +34,7 @@ plt.title('Random Forest Regression')
 plt.xlabel('Temperature')
 plt.ylabel('Revenue')
 plt.show()
-
+ 
 plt.plot(X_grid, regressor.predict(X_grid), color = 'black')
 plt.title('Random Forest Regression')
 plt.xlabel('Temperature')
