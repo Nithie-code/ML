@@ -1,0 +1,50 @@
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid') #   seaborn-whitegrid #seaborn-pastel ggplot classic
+
+subjects=['MAP','MRR','Recall']
+
+TMR=[0.091,0.114,0.143]
+DeepCite=[0.112,0.172,0.224]
+GRSLA=[0.134,0.192,0.234]
+GANHBNR=[0.156,0.244,0.253]
+CRHBNE=[0.302,0.342,0.382]
+RARSB=[0.352,0.402,0.456]
+angles=np.linspace(0,2*np.pi,len(subjects), endpoint=False)
+print(angles)
+angles=np.concatenate((angles,[angles[0]]))
+print(angles)
+
+
+subjects.append(subjects[0])
+TMR.append(TMR[0])
+DeepCite.append(DeepCite[0])
+GRSLA.append(GRSLA[0])
+GANHBNR.append(GANHBNR[0])
+CRHBNE.append(CRHBNE[0])
+RARSB.append(RARSB[0])
+
+#plot radar figures
+fig=plt.figure(figsize=(6,6))
+ax=fig.add_subplot(polar=True)
+ax.plot(angles,TMR,linewidth=2,label='TMR')
+ax.fill(angles, TMR, alpha=0.25, color='Magenta')
+ax.plot(angles,DeepCite,linewidth=2,label='DeepCite')
+ax.fill(angles, DeepCite, alpha=0.25, color='blue') #blue
+ax.plot(angles,GRSLA,linewidth=2,label='GRSLA')
+ax.fill(angles,GRSLA,alpha=0.25, color='yellow') #blue
+ax.plot(angles,GANHBNR,linewidth=2,label='GAN-HBNR')
+ax.fill(angles, GANHBNR, alpha=0.25, color='Magenta') #yellow
+ax.plot(angles,CRHBNE,linewidth=2,label='CR-HBNE')
+ax.fill(angles, CRHBNE, alpha=0.25, color='red') #red
+ax.plot(angles,RARSB,linewidth=2,label='RAR-SB')
+ax.fill(angles, RARSB, alpha=0.25, color='black') #black
+ax.set_thetagrids(angles * 180/np.pi, subjects)
+plt.grid(True)
+
+plt.legend(loc="upper right",fontsize='large')
+#plt.gca().legend()
+
+#plt.tight_layout()
+plt.savefig('Radar-DBLP-V13.pdf')
+plt.show()
